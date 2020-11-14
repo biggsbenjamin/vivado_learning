@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "add_ex.h"
 
-int main()
+/*int main()
 {
     int i;
     int result;
@@ -23,4 +23,31 @@ int main()
     }
     printf("simulation complete\n");
     return 0;
+}*/
+
+
+int main (int argc, char** argv){
+    Mat src_rgb = imread(INPUT_IMAGE);
+    if (!src_rgb.data) {
+        printf("error no image\n");
+        return -1;
+    }
+    Mat src_yuv(src_rgb.rows, src_rgb.cols, CV-8UC2);
+    Mat dst_yuv(src_rgb.rows, src_rgb.cols, CV-8UC2);
+    Mat dst_rgb(src_rgb.rows, src_rgb.cols, CV-8UC3);
+
+    cvtcolor_rgb2yuv422(src_rgb, src_yuv);
+    
+    IplImage src = src_yuv;
+    IplImage dst = dst_yuv;
+    hls_image_filter(&src, &dst);
+    cvtColor(dst_yuv, dst_rgb, CV_YUV2BGR_YUYV);
+    imwrite(OUTPUT_IMAGE, dst_rgb);
+}
+
+void hls_image_filter(IplImage *src, IplImage *dst) {
+    AXI_STREAM src_axit, dst_axi;
+    IplImage2AXIvideo(src, src_axi);
+    image_filter(src_axi, dst_axi, src->height, src->width);
+    AXIvideo2IplImage(dst_axi, dst);
 }

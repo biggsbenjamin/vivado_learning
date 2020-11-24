@@ -1,4 +1,4 @@
-lude <ap_axi_sdata.h>
+#include <ap_axi_sdata.h>
 
 #include "./cpu.h"
 
@@ -85,7 +85,14 @@ void cpu(
     } else if (opcode == OPCODE_ADD) {
       res = (data_T) arg_0 + arg_1;
     }
+    
     // TODO: add branch handling code here
+    if (opcode == OPCODE_BEQ && arg_0 == arg_1) {
+        pc = new_pc;
+    }
+    if (opcode == OPCODE_BNE && arg_0 != arg_1) {
+        pc = new_pc;
+    }
 
     // Memory load/store
     if (opcode == OPCODE_LOAD) {

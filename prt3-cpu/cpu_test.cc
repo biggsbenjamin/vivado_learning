@@ -5,7 +5,7 @@
 #include "../tut_src/test_lib.h"
 
 #define VECTOR_LEN 128
-#define USE_BRANCH false
+#define USE_BRANCH true
 
 unsigned globalSeed;
 
@@ -96,19 +96,29 @@ int main(void) {
     i_mem[7*i+6] = getMemoryInsn(OPCODE_STORE, R5, R2);   // Store R5 into C
   }
 #else
+
   // Loop Init
   i_mem[0] = getWriteImmediateInsn(R0, 0);            // loop index
   i_mem[1] = getWriteImmediateInsn(R1, 1);            // loop increment
   i_mem[2] = getWriteImmediateInsn(R2, VECTOR_LEN);   // loop bound
-  i_mem[3] = getWriteImmediateInsn(R4, addr_A);       // A base address
-  i_mem[4] = getWriteImmediateInsn(R5, addr_B);       // B base address
-  i_mem[5] = getWriteImmediateInsn(R6, addr_C);       // C base address
+  i_mem[3] = getWriteImmediateInsn(R3, addr_A);       // A base address
+  i_mem[4] = getWriteImmediateInsn(R4, addr_B);       // B base address
+  i_mem[5] = getWriteImmediateInsn(R5, addr_C);       // C base address
   // TODO: Complete Loop Body
-  i_mem[6] = ...
+  i_mem[6] = getMemoryInsn(OPCODE_LOAD, R6, R3);
+  i_mem[7] = getMemoryInsn(OPCODE_LOAD, R7, R4);
+  i_mem[8] = getBinaryInsn(OPCODE_ADD, R8, R6, R7); // R8 <- R6 + R7
+  i_mem[9] = getMemoryInsn(OPCODE_STORE, R8, R5);   // Store R8 into C
+  i_mem[10] = getBinaryInsn(OPCODE_ADD, R3, R3, R1); // increment loop index
+  i_mem[11] = getBinaryInsn(OPCODE_ADD, R4, R4, R1); // increment loop index
+  i_mem[12] = getBinaryInsn(OPCODE_ADD, R5, R5, R1); // increment loop index
   // Loop Index Increment & Condition
-  i_mem[...] = getBinaryInsn(OPCODE_ADD, R0, R0, R1); // increment loop index
-  i_mem[...] = getBranchInsn(OPCODE_BNE, R0, R2, 6); // branch if not equal
+  i_mem[13] = getBinaryInsn(OPCODE_ADD, R0, R0, R1); // increment loop index
+  i_mem[14] = getBranchInsn(OPCODE_BNE, R0, R2, 6); // branch if not equal
+
 #endif  // USE_BRANCH
+
+
 
   // Invoke the CPU
 #if NO_SIM

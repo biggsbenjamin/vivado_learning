@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "vadd.h"
-#include "tut_src/test_lib.h"
+#include "../tut_src/test_lib.h"
 
 unsigned globalSeed;
 

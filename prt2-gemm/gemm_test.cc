@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "gemm.h"
-#include "tut_src/test_lib.h"
+#include "../tut_src/test_lib.h"
 
 unsigned globalSeed;
 

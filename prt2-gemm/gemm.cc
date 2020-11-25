@@ -17,12 +17,12 @@ void gemm(
 #pragma HLS INTERFACE s_axilite port = return bundle = CONTROL_BUS
 
     int a_buff[M][N]; //these are buffers to store the streamed info
-#pragma HLS array_partition variable=a_buff complete dim=2
+#pragma HLS array_partition variable=a_buff block factor=8 dim=2
     int b_buff[O][N];
-#pragma HLS array_partition variable=b_buff complete dim=2
+#pragma HLS array_partition variable=b_buff block factor=8 dim=2
     int c_buff[M][O];
 //#pragma HLS array_partition variable=c_buff complete dim=0 // this was a naive thing to do
-#pragma HLS array_partition variable=c_buff complete dim=2
+#pragma HLS array_partition variable=c_buff block factor=8 dim=2
 
     // Load A & B
     memcpy(&a_buff[0][0], const_cast<int*>(a), sizeof(int) * M * N); //only works for a top level fn or arg

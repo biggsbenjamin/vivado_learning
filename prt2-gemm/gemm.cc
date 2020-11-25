@@ -11,9 +11,9 @@ void gemm(
     volatile int *a,
     volatile int *b,
     volatile int *c) {
-#pragma HLS INTERFACE m_axi port = a offset = slave bundle = a_port //axi4 are streaming protocols - can only go one way
-#pragma HLS INTERFACE m_axi port = b offset = slave bundle = b_port //read in
-#pragma HLS INTERFACE m_axi port = c offset = slave bundle = c_port //write out
+#pragma HLS INTERFACE m_axi port = a offset = slave bundle = a_port depth = 64*64//axi4 are streaming protocols - can only go one way
+#pragma HLS INTERFACE m_axi port = b offset = slave bundle = b_port depth = 64*64//read in
+#pragma HLS INTERFACE m_axi port = c offset = slave bundle = c_port depth = 64*64//write out
 #pragma HLS INTERFACE s_axilite port = return bundle = CONTROL_BUS
 
     int a_buff[M][N]; //these are buffers to store the streamed info
@@ -21,7 +21,7 @@ void gemm(
     int b_buff[O][N];
 #pragma HLS array_partition variable=b_buff complete dim=2
     int c_buff[M][O];
-//#pragma HLS array_partition variable=c_buff complete dim=0 // this was a very dumb thing to do
+//#pragma HLS array_partition variable=c_buff complete dim=0 // this was a naive thing to do
 #pragma HLS array_partition variable=c_buff complete dim=2
 
     // Load A & B

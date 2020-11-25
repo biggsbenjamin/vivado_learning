@@ -18,8 +18,8 @@ void cpu(
   volatile insn_T *i_mem,
   volatile data_T *d_mem
   ) {
-#pragma HLS INTERFACE m_axi port = i_mem offset = slave bundle = i_mem
-#pragma HLS INTERFACE m_axi port = d_mem offset = slave bundle = d_mem
+#pragma HLS INTERFACE m_axi port = i_mem offset = slave bundle = i_mem depth = 1024
+#pragma HLS INTERFACE m_axi port = d_mem offset = slave bundle = d_mem depth = 1024
 #pragma HLS INTERFACE s_axilite port = return bundle = CONTROL_BUS
 
   // Instruction cache
@@ -41,6 +41,7 @@ void cpu(
 
   // Now execute program until we encounter a FINISH opcode
   PROGRAM_LOOP: while (!finish) {
+#pragma HLS PIPELINE
     // Fetch
     Insn insn;
     insn.generic = i_cache[pc];
